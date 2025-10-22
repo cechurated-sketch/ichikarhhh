@@ -1,1 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaguya's AutoHotkey Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
+        }
 
+        body {
+            background: linear-gradient(135deg, #ff9ec0, #ffc2d6, #ffd1dc);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        header {
+            text-align: center;
+            padding: 30px 0;
+            position: relative;
+        }
+
+        .title {
+            font-size: 3.5rem;
+            color: #ff2e7a;
+            text-shadow: 3px 3px 0 #ff8ebd, 6px 6px 0 rgba(255, 46, 122, 0.3);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #b3004f;
+            margin-bottom: 30px;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .upload-section {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(255, 46, 122, 0.3);
+            flex: 1;
+            min-width: 300px;
+            max-width: 600px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-section h2 {
+            color: #ff2e7a;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+
+        .upload-area {
+            border: 3px dashed #ff8ebd;
+            border-radius: 15px;
+            padding: 40px 20px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .upload-area:hover {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: #ff2e7a;
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            color: #ff2e7a;
+            margin-bottom: 15px;
+        }
+
+        .upload-text {
+            color: #b3004f;
+            font-size: 1.2rem;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .upload-btn {
+            background: linear-gradient(to right, #ff2e7a, #ff6ba0);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: block;
+            margin: 0 auto;
+            box-shadow: 0 5px 15px rgba(255, 46, 122, 0.4);
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 46, 122, 0.6);
+        }
+
+        /* File List */
+        .file-list {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(255, 46, 122, 0.3);
+            flex: 1;
+            min-width: 300px;
+            max-width: 500px;
+        }
+
+        .file-list h2 {
+            color: #ff2e7a;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+
+        .file-item {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 3px 10px rgba(255, 46, 122, 0.2);
+            transition: all 0.3s;
+        }
+
+        .file-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(255, 46, 122, 0.3);
+        }
+
+        .file-name {
+            color: #b3004f;
+            font-weight: bold;
+        }
+
+        .file-actions button {
+            background: #ff8ebd;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        /* Kaguya Stickers */
+        .kaguya-sticker {
+            position: absolute;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .sticker-1 {
+            top: 10%;
+            left: 5%;
+            width: 120px;
+            transform: rotate(-10deg);
+        }
+
+        .sticker-2 {
+            top: 15%;
+            right: 5%;
+            width: 100px;
+            transform: rotate(15deg);
+        }
+
+        .sticker-3 {
+            bottom: 10%;
+            left: 8%;
+            width: 110px;
+            transform: rotate(5deg);
+        }
+
+        .sticker-4 {
+            bottom: 15%;
+            right: 10%;
+            width: 130px;
+            transform: rotate(-5deg);
+        }
+
+        .sticker-5 {
+            top: 40%;
+            left: 2%;
+            width: 90px;
+            transform: rotate(-15deg);
+        }
+
+        .sticker-6 {
+            top: 50%;
+            right: 3%;
+            width: 95px;
+            transform: rotate(10deg);
+        }
+
+        /* Sparkles */
+        .sparkle {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            animation: sparkle 2s infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: #b3004f;
+            margin-top: 50px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.5rem;
+            }
+            
+            .kaguya-sticker {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sparkles -->
+    <div id="sparkles-container"></div>
+
+    <!-- Kaguya Stickers -->
+    <img src="https://i.pinimg.com/736x/c3/08/e8/c308e8ff1d2088df68fa2c154428944e.jpg">
+    <img src="https://i.redd.it/rte1bjock1591.jpg">
+    <img src="https://i.pinimg.com/736x/97/d2/0d/97d20d96534f5c15fde15b1839a2825a.jpg">
+    <img src="https://attachments-cdn-s.coub.com/coub_storage/coub/simple/cw_image/d5cd2057457/a32a4bba80e4a7a52276a/1603531808_00010.jpg">
+    <img src="https://i.imgur.com/g5LUXm3.gif">
+    <img src="https://i.imgur.com/xpZC2mm.gif">
+
+    <div class="container">
+        <header>
+            <h1 class="title">Ichika's AutoHotkey Hub</h1>
+            <p class="subtitle">Upload and manage your AHK scripts with style!</p>
+        </header>
+
+        <div class="main-content">
+            <section class="upload-section">
+                <h2>Upload Your AHK Files</h2>
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">📁</div>
+                    <p class="upload-text">Drag & drop your AHK files here or click to browse</p>
+                </div>
+                <input type="file" id="fileInput" class="file-input" accept=".ahk" multiple>
+                <button class="upload-btn" id="uploadBtn">Upload Files</button>
+            </section>
+
+            <section class="file-list">
+                <h2>Your AHK Files</h2>
+                <div id="fileListContainer">
+                    <!-- Files will be listed here -->
+                    <div class="file-item">
+                        <span class="file-name">example-script.ahk</span>
+                        <div class="file-actions">
+                            <button class="download-btn">Download</button>
+                            <button class="delete-btn">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <footer>
+            <p>Made with ❤️ for Kaguya Shinomiya fans</p>
+        </footer>
+    </div>
+
+    <script>
+        // Create sparkles
+        function createSparkles() {
+            const container = document.getElementById('sparkles-container');
+            const sparkleCount = 20;
+            
+            for (let i = 0; i < sparkleCount; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.classList.add('sparkle');
+                
+                // Random position
+                const left = Math.random() * 100;
+                const top = Math.random() * 100;
+                
+                // Random size
+                const size = Math.random() * 10 + 5;
+                
+                // Random animation delay
+                const delay = Math.random() * 2;
+                
+                sparkle.style.left = `${left}vw`;
+                sparkle.style.top = `${top}vh`;
+                sparkle.style.width = `${size}px`;
+                sparkle.style.height = `${size}px`;
+                sparkle.style.animationDelay = `${delay}s`;
+                
+                container.appendChild(sparkle);
+            }
+        }
+
+        // File upload functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            createSparkles();
+            
+            const uploadArea = document.getElementById('uploadArea');
+            const fileInput = document.getElementById('fileInput');
+            const uploadBtn = document.getElementById('uploadBtn');
+            const fileListContainer = document.getElementById('fileListContainer');
+            
+            // Click on upload area to trigger file input
+            uploadArea.addEventListener('click', function() {
+                fileInput.click();
+            });
+            
+            // Handle file selection
+            fileInput.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    handleFiles(this.files);
+                }
+            });
+            
+            // Upload button click
+            uploadBtn.addEventListener('click', function() {
+                fileInput.click();
+            });
+            
+            // Drag and drop functionality
+            uploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#ff2e7a';
+                uploadArea.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+            });
+            
+            uploadArea.addEventListener('dragleave', function() {
+                uploadArea.style.borderColor = '#ff8ebd';
+                uploadArea.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
+            });
+            
+            uploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#ff8ebd';
+                uploadArea.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
+                
+                if (e.dataTransfer.files.length > 0) {
+                    handleFiles(e.dataTransfer.files);
+                }
+            });
+            
+            // Handle the selected files
+            function handleFiles(files) {
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    
+                    // Check if it's an AHK file
+                    if (file.name.endsWith('.ahk')) {
+                        addFileToList(file.name);
+                    } else {
+                        alert('Please upload only .ahk files!');
+                    }
+                }
+            }
+            
+            // Add file to the list
+            function addFileToList(fileName) {
+                const fileItem = document.createElement('div');
+                fileItem.classList.add('file-item');
+                
+                fileItem.innerHTML = `
+                    <span class="file-name">${fileName}</span>
+                    <div class="file-actions">
+                        <button class="download-btn">Download</button>
+                        <button class="delete-btn">Delete</button>
+                    </div>
+                `;
+                
+                // Add delete functionality
+                const deleteBtn = fileItem.querySelector('.delete-btn');
+                deleteBtn.addEventListener('click', function() {
+                    fileItem.remove();
+                });
+                
+                fileListContainer.appendChild(fileItem);
+            }
+            
+            // Add some example files
+            addFileToList('quick-macros.ahk');
+            addFileToList('gaming-shortcuts.ahk');
+            addFileToList('productivity-tools.ahk');
+        });
+    </script>
+</body>
+</html>
